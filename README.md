@@ -48,16 +48,8 @@ This project was initiated by Kara Solutions, a leading data science company wit
 
 ## Installation
 
-### Clone the Repository
-
-```bash
-git clone https://github.com/yourusername/EthioMedDataWarehouse.git
-cd EthioMedDataWarehouse
-```
-
-## Installation
-
 - Clone the Repository
+
 ```bash
 git clone https://github.com/yourusername/EthioMedDataWarehouse.git
 cd EthioMedDataWarehouse
@@ -94,6 +86,7 @@ You can run individual scripts for different tasks (scraping, data processing, e
 python src/scraping/telegram_scraper.py
 python src/object_detection/yolo_object_detection.py
 ```
+
 ## Project Structure
 
 ```bash
@@ -133,11 +126,11 @@ EthioMedDataWarehouse/
 
 ## Usage
 
-**Telegram Scraping**: Run src/scraping/telegram_scraper.py to collect data from specified Telegram channels.
-**Data Cleaning**: Execute src/cleaning/data_cleaning.py to clean the collected raw data.
-**Object Detection**: Use src/object_detection/yolo_object_detection.py to run YOLO on collected images and store the detection results.
-**Data Warehouse Setup**: Run src/warehouse/database_setup.py to set up and configure your PostgreSQL data warehouse.
-**API Exposure**: Start the FastAPI server by running uvicorn main:app --reload to expose the data through RESTful APIs.
+**Telegram Scraping**: Run `src/scraping/telegram_scraper.py` to collect data from specified Telegram channels.
+**Data Cleaning**: Execute `src/cleaning/data_cleaning.py` to clean the collected raw data.
+**Object Detection**: Use `src/object_detection/yolo_object_detection.py` to run YOLO on collected images and store the detection results.
+**Data Warehouse Setup**: Run `src/warehouse/database_setup.py` to set up and configure your PostgreSQL data warehouse.
+**API Exposure**: Start the FastAPI server by running `uvicorn main:app --reload` to expose the data through RESTful APIs.
 
 ## Contributing
 
@@ -160,4 +153,4 @@ Contributions are welcome! Please follow these steps:
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
