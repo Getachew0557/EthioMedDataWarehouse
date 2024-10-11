@@ -1,0 +1,2 @@
+2024-10-11 17:03:35,633 - INFO - Loaded data successfully from C:\Users\getac\Documents\10 Academy\week 7\EthioMedDataWarehouse\data\telegram_medical_businesses_data.csv
+2024-10-11 17:04:03,784 - ERROR - Error loading data from C:\Users\getac\Documents\10 Academy\week 7\EthioMedDataWarehouse\data\telegram_medical_businesses_data.csv: No columns to parse from file

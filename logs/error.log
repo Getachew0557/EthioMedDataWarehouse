@@ -1,0 +1,5 @@
+2024-10-11 16:56:20,434 - ERROR - Error loading data from ../data/telegram_medical_businesses_data.csv: [Errno 2] No such file or directory: '../data/telegram_medical_businesses_data.csv'
+2024-10-11 16:58:26,855 - ERROR - Error loading data from ../data/telegram_medical_businesses_data.csv: [Errno 2] No such file or directory: '../data/telegram_medical_businesses_data.csv'
+2024-10-11 17:01:57,968 - INFO - Loaded data successfully from C:\Users\getac\Documents\10 Academy\week 7\EthioMedDataWarehouse\data\telegram_medical_businesses_data.csv
+2024-10-11 17:03:35,633 - INFO - Loaded data successfully from C:\Users\getac\Documents\10 Academy\week 7\EthioMedDataWarehouse\data\telegram_medical_businesses_data.csv
+2024-10-11 17:04:03,784 - ERROR - Error loading data from C:\Users\getac\Documents\10 Academy\week 7\EthioMedDataWarehouse\data\telegram_medical_businesses_data.csv: No columns to parse from file
