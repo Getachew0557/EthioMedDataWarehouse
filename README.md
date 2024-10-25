@@ -89,48 +89,223 @@ python src/object_detection/yolo_object_detection.py
 
 ## Project Structure
 
+
 ```bash
-EthioMedDataWarehouse/
-│
-├── notebooks/                    # Jupyter Notebooks for experimentation
-│   └── exploration.ipynb
-│
-├── src/                          # Source code for the project
-│   ├── scraping/                 # Scripts for scraping data
-│   │   └── telegram_scraper.py
-│   │
-│   ├── cleaning/                 # Data cleaning scripts
-│   │   └── data_cleaning.py
-│   │
-│   ├── object_detection/         # YOLO object detection scripts
-│   │   └── yolo_object_detection.py
-│   │
-│   └── warehouse/                # Scripts for data warehouse setup
-│       └── database_setup.py
-│
-├── tests/                        # Unit and integration tests
-│   └── test_scraping.py
-│
-├── scripts/                      # Utility and helper scripts
-│   └── run_pipeline.sh           # Script to run the entire pipeline
-│
-├── .github/                      # GitHub Actions for CI/CD
-│   └── workflows/
-│       └── python-app.yml        # Python test workflow
-│
-├── .gitignore                    # Files to ignore in Git
-├── README.md                     # Project README
-├── requirements.txt              # Python dependencies
-└── LICENSE                       # Project License
+├── app/
+│   ├── telegram_scraper.py     # Script for scraping Telegram data
+│   ├── utils.py                # Helper functions for scraping
+│   └── raw_data/               # Directory where raw data is temporarily stored
+├── data/
+│   ├── dbt_project/            # DBT models for data transformation
+│   └── cleaning_pipeline.py    # Script for running DBT data cleaning models
+├── images/
+│   ├── detect.py               # Script for YOLO object detection
+│   └── images/                 # Scraped images for object detection           # Data
+├── logs/
+│   ├── main.py                 # FastAPI app entry point
+│   ├── crud.py                 # CRUD operations for API
+│   ├── schemas.py              # Pydantic schemas for request/response validation
+│   └── database.py             # Database connection for FastAPI
+│   └── models.py               # SQLAlchemy models for the data warehouse
+│   └── database.py             
+├── medical_data/
+│   ├── telegram_scraper.py     # Script for scraping Telegram data
+│   ├── utils.py                # Helper functions for scraping
+│   └── raw_data/               # Directory where raw data is temporarily stored
+├── notebooks/
+│   ├── dbt_project/            # DBT models for data transformation
+│   └── cleaning_pipeline.py    # Script for running DBT data cleaning models
+├── scripts/
+│   ├── detect.py               # Script for YOLO object detection
+│   └── images/                 # Scraped images for object detection           # Data
+├── src/
+│   ├── main.py                 # FastAPI app entry point
+│   ├── crud.py                 # CRUD operations for API
+│   ├── schemas.py              # Pydantic schemas for request/response validation
+│   └── database.py             # Database connection for FastAPI
+│   └── models.py               # SQLAlchemy models for the data warehouse
+│   └── database.py 
+├── tests/
+│   ├── telegram_scraper.py     # Script for scraping Telegram data
+│   ├── utils.py                # Helper functions for scraping
+│   └── raw_data/               # Directory where raw data is temporarily stored
+├── yolov5/
+│   ├── dbt_project/            # DBT models for data transformation
+│   └── cleaning_pipeline.py
+├── .gitignore               
+├── requirements.txt
+└── README.md                   #
 ```
 
 ## Usage
 
-**Telegram Scraping**: Run `src/scraping/telegram_scraper.py` to collect data from specified Telegram channels.
-**Data Cleaning**: Execute `src/cleaning/data_cleaning.py` to clean the collected raw data.
-**Object Detection**: Use `src/object_detection/yolo_object_detection.py` to run YOLO on collected images and store the detection results.
-**Data Warehouse Setup**: Run `src/warehouse/database_setup.py` to set up and configure your PostgreSQL data warehouse.
-**API Exposure**: Start the FastAPI server by running `uvicorn main:app --reload` to expose the data through RESTful APIs.
+#### Telegram Channels Scraped
+- [DoctorsET](https://t.me/DoctorsET)
+- [Chemed Telegram Channel](https://t.me/lobelia4cosmetics)
+- [Yetenaweg](https://t.me/yetenaweg)
+- [EAHCI](https://t.me/EAHCI)
+- Additional channels from [https://et.tgstat.com/medicine](https://et.tgstat.com/medicine
+
+#### Setup and Execution
+
+1. **Install Dependencies**:
+   ```bash
+   pip install telethon
+   ```
+
+2. **Telegram Scraping**: Before running, make sure to create a `.env` file with your Telegram API credentials (API ID, API hash, and phone number).
+   
+   Example `.env` file:
+   ```plaintext
+   API_ID=your_api_id
+   API_HASH=your_api_hash
+   PHONE=your_phone_number
+   ```
+- Run `src/scraping/telegram_scraper.py` to collect data from specified Telegram channels.
+3. **Data Cleaning and Transformation**: After scraping, the raw data is cleaned and transformed using **DBT** (Data Build Tool). This process involves removing duplicates, handling missing values, and standardizing formats for easy querying and analysis.
+#### Setup and Execution
+
+1. **Install DBT**:
+   Install DBT and initialize a new DBT project:
+   ```bash
+   pip install dbt
+   dbt init medical_data
+   ```
+
+2. **Define DBT Models**:
+   - Define SQL models in the `medical_data/models/` directory for cleaning and transforming data.
+   - Sample DBT model file:
+     ```sql
+     -- models/cleaned_telegram_data.sql
+     select
+         distinct message_id,
+         message_text,
+         timestamp::timestamp as message_time,
+         channel_name
+     from raw_data
+     where message_text is not null
+     ```
+
+3. **Run DBT Models**:
+   Apply the transformations by running the DBT models:
+   ```bash
+   dbt run
+   ```
+
+4. **Testing**:
+   Test data quality using DBT's built-in test features:
+   ```bash
+   dbt test
+   ```
+
+### 3. Object Detection using YOLO
+
+#### Description
+In this task, we perform **object detection** on the scraped images using **YOLOv5** to detect medical equipment, promotional materials, and other objects related to Ethiopian medical businesses.
+
+#### Setup and Execution
+
+1. **Install YOLO Dependencies**:
+   Install PyTorch and YOLOv5:
+   ```bash
+   pip install torch torchvision
+   git clone https://github.com/ultralytics/yolov5.git
+   cd yolov5
+   pip install -r requirements.txt
+   ```
+
+2. **Prepare Images**:
+   Place the scraped images from the `images/` folder directory for object detection.
+
+3. **Run YOLO**:
+   Run the YOLOv5 object detection script:
+   ```bash
+   cd yolov5
+   python detect.py --weights yolov5s.pt --img 640 --conf 0.5 --source data/images
+   ```
+
+4. **Store Detection Results**:
+   The detection results (bounding boxes, class labels, and confidence scores) will be saved in a structured format, which will later be loaded into the data warehouse.
+
+### 4. Data Warehouse Design and Implementation
+
+#### Description
+The data warehouse stores all the cleaned, transformed, and enriched data, enabling efficient querying and analysis. The data includes textual Telegram posts, image metadata, and YOLO object detection results.
+
+#### Setup and Execution
+
+1. **Install PostgreSQL**:
+   Install and configure PostgreSQL, or alternatively, use SQLite for local testing.
+
+2. **Database Models**:
+   Define your database schema in `app/models.py` using SQLAlchemy:
+   ```python
+   from sqlalchemy import Column, Integer, String, ForeignKey
+   from sqlalchemy.orm import relationship
+
+   class ImageMetadata(Base):
+       __tablename__ = 'image_metadata'
+       id = Column(Integer, primary_key=True)
+       image_path = Column(String, nullable=False)
+       channel_name = Column(String, nullable=False)
+       timestamp = Column(String, nullable=False)
+
+   class ObjectDetection(Base):
+       __tablename__ = 'object_detection'
+       id = Column(Integer, primary_key=True)
+       image_id = Column(Integer, ForeignKey('image_metadata.id'))
+       bounding_box = Column(String, nullable=False)
+       confidence = Column(Float, nullable=False)
+       class_label = Column(String, nullable=False)
+
+       image = relationship("ImageMetadata", back_populates="detections")
+   ```
+
+3. **Migrate Database**:
+   Initialize and migrate the database to create the tables:
+   ```bash
+   python warehouse/database.py
+   ```
+
+## FastAPI for Data Access
+
+#### Description
+To expose the processed data via an API, **FastAPI** is used to create RESTful endpoints. These endpoints allow users to query the data warehouse for images, detections, and associated metadata.
+
+#### Setup and Execution
+
+1. **Install FastAPI**:
+   ```bash
+   pip install fastapi uvicorn
+   ```
+
+2. **Create FastAPI Application**:
+   - Define routes in `fastapi_app/main.py`:
+     
+```python
+     from fastapi import FastAPI, Depends
+     from sqlalchemy.orm import Session
+     from .crud import get_detections
+     from .database import SessionLocal
+
+     app = FastAPI()
+
+     @app.get("/detections/{image_id}")
+     def read_detections(image_id: int, db: Session = Depends(get_db)):
+         detections = get_detections(db, image_id=image_id
+
+)
+         return detections
+```
+
+3. **Run FastAPI**:
+   Start the FastAPI server:
+   ```bash
+   uvicorn app.main:app --reload
+   ```
+
+4. **Access the API**:
+   Visit `http://127.0.0.1:8000/` to explore the automatically generated API documentation.
 
 ## Contributing
 
